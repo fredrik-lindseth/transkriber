@@ -1,0 +1,30 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Models and large files (download via setup scripts)
+whisper.cpp/
+whisper/
+nb-whisper-large/
+
+# Input files - sensitive videos (except example)
+inn/*
+!inn/eksempel.mp4
+
+# Output files - sensitive transcriptions (except example)
+ut/*
+!ut/eksempel/
+
+# Secrets
+huggingface-token
+.env
+*.token
+
+# macOS
+.DS_Store
+
+# Audio temp files
+*.wav

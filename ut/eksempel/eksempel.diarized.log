@@ -1,0 +1,6 @@
+Audio: inn/eksempel.mp4
+Whisper model: large
+Language: no
+Device: mps
+Speakers detected: 1
+Segments: 3
