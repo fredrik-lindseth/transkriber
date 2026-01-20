@@ -12,6 +12,18 @@ import os
 import argparse
 from pathlib import Path
 
+def load_dotenv():
+    """Load environment variables from .env file if it exists."""
+    env_file = Path(__file__).parent / ".env"
+    if env_file.exists():
+        for line in env_file.read_text().splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                key, value = line.split("=", 1)
+                os.environ.setdefault(key.strip(), value.strip())
+
+load_dotenv()
+
 def check_dependencies():
     """Check if required packages are installed."""
     missing = []

@@ -86,10 +86,14 @@ Pyannote-modellene krever at du godtar bruksvilkår:
 
 4. Sett token som miljøvariabel:
    ```bash
-   export HF_TOKEN="hf_din_token_her"
+   cp .env.example .env
+   # Rediger .env og sett inn din token
    ```
    
-   Eller legg til i `~/.zshrc` / `~/.bashrc` for permanent bruk.
+   Eller eksporter direkte:
+   ```bash
+   export HF_TOKEN="hf_din_token_her"
+   ```
 
 ## Bruk
 
