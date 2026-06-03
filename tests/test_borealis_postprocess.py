@@ -1,6 +1,7 @@
 import json
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 
 import borealis_postprocess as bp
@@ -159,6 +160,30 @@ class TestPostprocess(unittest.TestCase):
             self.assertEqual((out / "x.keypoints.md").read_text(encoding="utf-8").strip(),
                              "- Punkt")
             self.assertIn("A.", (out / "x.cleaned.vtt").read_text(encoding="utf-8"))
+
+    def test_summary_network_error_degrades_gracefully(self):
+        """Nettverksfeil under oppsummering skal ikke velte steget.
+
+        .cleaned.vtt er alt skrevet, og vi hopper over resten med en advarsel.
+        """
+        class DropsAfterCleanup:
+            def is_available(self):
+                return True
+
+            def generate(self, prompt, json_format=False):
+                if json_format:
+                    return json.dumps({"segments": [
+                        {"i": 0, "text": "A."}, {"i": 1, "text": "B."},
+                        {"i": 2, "text": "C."}]})
+                raise urllib.error.URLError("connection lost")
+
+        with tempfile.TemporaryDirectory() as d:
+            out = Path(d)
+            (out / "x.diarized.vtt").write_text(SAMPLE_VTT, encoding="utf-8")
+            bp.postprocess(out, "x", DropsAfterCleanup())  # skal ikke kaste
+            self.assertTrue((out / "x.cleaned.vtt").exists())
+            self.assertFalse((out / "x.summary.md").exists())
+            self.assertFalse((out / "x.keypoints.md").exists())
 
 
 if __name__ == "__main__":

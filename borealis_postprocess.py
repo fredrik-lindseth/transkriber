@@ -198,15 +198,20 @@ def postprocess(output_dir, basename, client=None):
     cleaned = clean_vtt(segments, client)
     (output_dir / f"{basename}.cleaned.vtt").write_text(
         render_vtt(cleaned), encoding="utf-8")
+    print(f"  Skrev {basename}.cleaned.vtt")
     text = grouped_text(cleaned)
-    print("  Lager oppsummering...")
-    (output_dir / f"{basename}.summary.md").write_text(
-        summarize(text, client) + "\n", encoding="utf-8")
-    print("  Trekker ut nokkelpunkter...")
-    (output_dir / f"{basename}.keypoints.md").write_text(
-        extract_keypoints(text, client) + "\n", encoding="utf-8")
-    print(f"  Etterbehandling ferdig: {basename}.cleaned.vtt, "
-          f"{basename}.summary.md, {basename}.keypoints.md")
+    try:
+        print("  Lager oppsummering...")
+        (output_dir / f"{basename}.summary.md").write_text(
+            summarize(text, client) + "\n", encoding="utf-8")
+        print("  Trekker ut nokkelpunkter...")
+        (output_dir / f"{basename}.keypoints.md").write_text(
+            extract_keypoints(text, client) + "\n", encoding="utf-8")
+        print(f"  Etterbehandling ferdig: {basename}.cleaned.vtt, "
+              f"{basename}.summary.md, {basename}.keypoints.md")
+    except (urllib.error.URLError, OSError) as exc:
+        print(f"  Advarsel: oppsummering/nokkelpunkter feilet ({exc}), hopper over. "
+              f"{basename}.cleaned.vtt er skrevet.", file=sys.stderr)
 
 
 def main():
