@@ -69,9 +69,9 @@ lyd ──transcribe-diarize.py──> ut/<navn>/<navn>.diarized.{vtt,txt,log}
 
 Etter at de tre diarized-filene er skrevet i `transcribe_with_diarization`, kall
 `postprocess(...)`. Nye CLI-flagg:
-- `--no-postprocess` — hopp over etterbehandlingen.
-- `--ollama-model` — default `hf.co/NbAiLab/borealis-27b-gguf`.
-- `--ollama-url` — default `http://localhost:11434`.
+- `--no-postprocess`, hopp over etterbehandlingen.
+- `--ollama-model`, default `hf.co/NbAiLab/borealis-27b-gguf`.
+- `--ollama-url`, default `http://localhost:11434`.
 
 ## Prompts
 
@@ -91,9 +91,9 @@ kun på transkriptet.
 ## Output
 
 I `ut/<navn>/`:
-- `<navn>.cleaned.vtt` — språkvasket, tidskoder og talere bevart
-- `<navn>.summary.md` — oppsummering
-- `<navn>.keypoints.md` — nøkkelpunkter/sitater
+- `<navn>.cleaned.vtt`, språkvasket, tidskoder og talere bevart
+- `<navn>.summary.md`, oppsummering
+- `<navn>.keypoints.md`, nøkkelpunkter/sitater
 
 ## Testing (TDD)
 

@@ -7,6 +7,15 @@ Transkriber norske video- og lydfiler til tekst med **automatisk taler-identifik
 - **VTT-fil** med undertekster og taler-markering (kan importeres i Dovetail, YouTube, etc.)
 - **Tekstfil** gruppert etter hvem som snakker
 
+Hvis du har [ollama](https://ollama.com) med Borealis-modellen kjørende, lager verktøyet
+i tillegg automatisk:
+
+- **Språkvasket VTT** med riktig tegnsetting og fjernet fyllord (tidskodene er bevart)
+- **Oppsummering** av samtalen
+- **Nøkkelpunkter og sitater**
+
+Dette steget hoppes pent over hvis ollama ikke kjører, og kan skrus av med `--no-postprocess`.
+
 ### Eksempel
 
 Input: `inn/eksempel.mp4` (17 sekunder video)
@@ -108,6 +117,9 @@ Output havner i `./ut/din-video/`:
 - `din-video.diarized.vtt` - Undertekster med taler-markering
 - `din-video.diarized.txt` - Ren tekst gruppert etter taler
 - `din-video.diarized.log` - Loggfil
+- `din-video.cleaned.vtt` - Språkvasket VTT (krever ollama + Borealis)
+- `din-video.summary.md` - Oppsummering (krever ollama + Borealis)
+- `din-video.keypoints.md` - Nøkkelpunkter og sitater (krever ollama + Borealis)
 
 ### Valg
 
@@ -132,6 +144,25 @@ python3 vtt-to-dovetail.py ./ut/video/video.vtt
 # Juster pause-terskel (standard 2 sekunder)
 python3 vtt-to-dovetail.py ./ut/video/video.vtt 3.0
 ```
+
+### Etterbehandling med Borealis
+
+Språkvask, oppsummering og nøkkelpunkter kjører automatisk på slutten av
+`transcribe-diarize.py` hvis ollama er oppe. Du kan også kjøre det frittstående på
+et ferdig transkript:
+
+```bash
+python3 borealis_postprocess.py ./ut/video/video.diarized.vtt
+```
+
+Krever [ollama](https://ollama.com) og Borealis-modellen:
+
+```bash
+ollama pull hf.co/NbAiLab/borealis-27b-gguf
+```
+
+Mindre varianter (12b, 4b) går raskere og bruker mindre minne. Bytt ut modellnavnet med
+`--ollama-model`.
 
 ## Rask modus (uten taler-identifikasjon)
 
@@ -166,6 +197,7 @@ Prosjektet bruker:
 - **[nb-whisper-large](https://huggingface.co/NbAiLab/nb-whisper-large)** - Norsk Whisper-modell fra Nasjonalbiblioteket/NB-AiLab
 - **[pyannote-audio](https://github.com/pyannote/pyannote-audio)** - State-of-the-art taler-identifikasjon
 - **[OpenAI Whisper](https://github.com/openai/whisper)** - Tale-til-tekst modell
+- **[Borealis](https://huggingface.co/collections/NbAiLab/borealis)** - Norsk språkmodell fra NB-AiLab, brukt til etterbehandling (språkvask, oppsummering)
 
 ## Tidsbruk
 
