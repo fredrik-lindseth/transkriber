@@ -12,9 +12,9 @@
 
 ## Filstruktur
 
-- Create: `borealis_postprocess.py` — hele etterbehandlingsmodulen (parser, OllamaClient, clean_vtt, summarize, extract_keypoints, postprocess, CLI).
-- Create: `tests/test_borealis_postprocess.py` — unittest-tester med fake ollama-klient.
-- Modify: `transcribe-diarize.py` — nye CLI-flagg og kall til `postprocess` i `main()`.
+- Create: `borealis_postprocess.py`, hele etterbehandlingsmodulen (parser, OllamaClient, clean_vtt, summarize, extract_keypoints, postprocess, CLI).
+- Create: `tests/test_borealis_postprocess.py`, unittest-tester med fake ollama-klient.
+- Modify: `transcribe-diarize.py`, nye CLI-flagg og kall til `postprocess` i `main()`.
 
 Alt av etterbehandling samles i én modul fordi delene henger tett sammen (samme datamodell for segmenter, samme klient). Modulen er liten nok til å holdes i hodet.
 
@@ -171,7 +171,7 @@ git commit -m "Add VTT parser and renderer for Borealis postprocessing"
 
 ---
 
-## Task 2: clean_vtt — batch-by-index med fallback
+## Task 2: clean_vtt, batch-by-index med fallback
 
 **Files:**
 - Modify: `borealis_postprocess.py`
