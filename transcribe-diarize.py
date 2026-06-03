@@ -209,7 +209,13 @@ def main():
     parser.add_argument("-m", "--model", help="Whisper model (tiny/base/small/medium/large)", default="large")
     parser.add_argument("-l", "--language", help="Language code", default="no")
     parser.add_argument("--hf-token", help="HuggingFace token (or set HF_TOKEN env var)")
-    
+    parser.add_argument("--no-postprocess", action="store_true",
+                        help="Hopp over Borealis-etterbehandling")
+    parser.add_argument("--ollama-model", default="hf.co/NbAiLab/borealis-27b-gguf",
+                        help="Ollama-modell for etterbehandling")
+    parser.add_argument("--ollama-url", default="http://localhost:11434",
+                        help="Ollama-server-URL")
+
     args = parser.parse_args()
     
     # Get HuggingFace token
@@ -240,6 +246,12 @@ def main():
         whisper_model=args.model,
         language=args.language
     )
+
+    if not args.no_postprocess:
+        from borealis_postprocess import OllamaClient, postprocess
+        print("Etterbehandling med Borealis...")
+        client = OllamaClient(model=args.ollama_model, url=args.ollama_url)
+        postprocess(output_dir, audio_path.stem, client)
 
 if __name__ == "__main__":
     main()
