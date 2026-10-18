@@ -28,3 +28,8 @@ huggingface-token
 
 # Audio temp files
 *.wav
+
+# Lokal saksoppfølging
+.dogcats/
+.dogcatrc
+.beads/
